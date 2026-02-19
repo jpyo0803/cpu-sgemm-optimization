@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  cpu-sgemm-optimization:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: cpu-sgemm-optimization:latest
+    container_name: cpu-sgemm-optimization
+    volumes:
+      - ../:/workspace
+    command: /bin/bash
+
+    working_dir: /workspace
+
+    stdin_open: true
+    tty: true
