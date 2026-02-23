@@ -7,6 +7,11 @@ N = 1024
 A = np.random.randn(N, N).astype(np.float32)
 B = np.random.randn(N, N).astype(np.float32)
 
+# Warm-up
+_ = custom_backend.matmul_naive(A, B)
+_ = custom_backend.matmul_naive_register_acc(A, B)
+_ = A @ B
+
 print(f"Matrix size: {N}x{N}")
 
 # Custom C++ (Naive)
@@ -15,6 +20,13 @@ C_custom = custom_backend.matmul_naive(A, B)
 end = time.time()
 custom_time = end - start
 print(f"Custom Naive C++ Time: {custom_time:.4f} seconds")
+
+# Custom C++ (Register Accumulation)
+start = time.time()
+C_custom = custom_backend.matmul_naive_register_acc(A, B)
+end = time.time()
+custom_register_time = end - start
+print(f"Custom Register Accumulation C++ Time: {custom_register_time:.4f} seconds")
 
 # Numpy (내부적으로 고도로 최적화된 OpenBLAS/MKL 사용)
 start = time.time()

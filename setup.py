@@ -3,17 +3,25 @@ from setuptools import setup, Extension
 import pybind11
 import numpy as np
 
+os.environ["CC"] = "clang"
+os.environ["CXX"] = "clang++"
+
+os.environ["CFLAGS"] = "-O0"
+os.environ["CXXFLAGS"] = "-O0"
+
 src_files = glob.glob('src/*.cpp')
 
 # CPU 최적화 컴파일 플래그
 cpp_extra_compile_args = [
-    '-O3', 
-    '-march=native', 
-    '-ffast-math', 
-    '-fopenmp', 
+    # '-O3', 
+    # '-march=native', 
+    # '-ffast-math', 
+    # '-fopenmp', 
     '-std=c++17'
 ]
-cpp_extra_link_args = ['-fopenmp']
+cpp_extra_link_args = [
+    # '-fopenmp',
+]
 
 ext_modules = [
     Extension(
