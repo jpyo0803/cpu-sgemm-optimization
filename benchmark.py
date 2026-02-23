@@ -1,6 +1,6 @@
 import numpy as np
 import time
-import custom_backend
+import custom_matmul as cmm
 
 # 튜토리얼과 동일하게 1024x1024 사이즈 생성
 N = 1024
@@ -8,32 +8,23 @@ A = np.random.randn(N, N).astype(np.float32)
 B = np.random.randn(N, N).astype(np.float32)
 
 # Warm-up
-_ = custom_backend.matmul_naive(A, B)
-_ = custom_backend.matmul_naive_register_acc(A, B)
-_ = custom_backend.matmul_loop_order(A, B)
+_ = cmm.CustomMatMulNaive().matmul(A, B)
+_ = cmm.CustomMatMulRegisterAcc().matmul(A, B)
+_ = cmm.CustomMatMulLoopOrder().matmul(A, B)
 _ = A @ B
 
 print(f"Matrix size: {N}x{N}")
 
 # Custom C++ (Naive)
-start = time.time()
-C_custom_naive = custom_backend.matmul_naive(A, B)
-end = time.time()
-custom_time = end - start
+C_custom_naive, custom_time = cmm.CustomMatMulNaive().matmul(A, B)
 print(f"Custom Naive C++ Time: {custom_time:.4f} seconds")
 
 # Custom C++ (Register Accumulation)
-start = time.time()
-C_custom_register = custom_backend.matmul_naive_register_acc(A, B)
-end = time.time()
-custom_register_time = end - start
+C_custom_register, custom_register_time = cmm.CustomMatMulRegisterAcc().matmul(A, B)
 print(f"Custom Register Accumulation C++ Time: {custom_register_time:.4f} seconds")
 
 # Custom C++ (Loop Order)
-start = time.time()
-C_custom_loop_order = custom_backend.matmul_loop_order(A, B)
-end = time.time()
-custom_loop_order_time = end - start
+C_custom_loop_order, custom_loop_order_time = cmm.CustomMatMulLoopOrder().matmul(A, B)
 print(f"Custom Loop Order C++ Time: {custom_loop_order_time:.4f} seconds")
 
 # Numpy (내부적으로 고도로 최적화된 OpenBLAS/MKL 사용)
