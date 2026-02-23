@@ -47,3 +47,16 @@ class CustomMatMulLoopOrder(CustomMatMulBase):
         result = custom_backend.matmul_loop_order(A, B)
         end_time = time.time()
         return result, end_time - start_time
+
+class CustomMatMulTiling1D(CustomMatMulBase):
+    def matmul(self, A: np.ndarray, B: np.ndarray):
+        # For simplicity, we assume A and B are 1024x1024 matrices
+        assert A.shape[0] == 1024
+        assert A.shape[1] == 1024
+        assert B.shape[0] == 1024
+        assert B.shape[1] == 1024
+
+        start_time = time.time()
+        result = custom_backend.matmul_tiling_1d(A, B)
+        end_time = time.time()
+        return result, end_time - start_time
