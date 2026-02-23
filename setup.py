@@ -13,9 +13,9 @@ src_files = glob.glob('src/*.cpp')
 
 # CPU 최적화 컴파일 플래그
 cpp_extra_compile_args = [
-    # '-O3', 
-    # '-march=native', 
-    # '-ffast-math', 
+    '-O3',
+    '-march=native',
+    '-ffast-math',
     # '-fopenmp', 
     '-std=c++17'
 ]
