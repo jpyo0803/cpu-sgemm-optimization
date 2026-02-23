@@ -16,11 +16,11 @@ cpp_extra_compile_args = [
     '-O3',
     '-march=native',
     '-ffast-math',
-    # '-fopenmp', 
+    '-fopenmp', 
     '-std=c++17'
 ]
 cpp_extra_link_args = [
-    # '-fopenmp',
+    '-fopenmp',
 ]
 
 ext_modules = [

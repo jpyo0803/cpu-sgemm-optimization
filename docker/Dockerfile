@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     build-essential \
     clang \
+    libomp-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
