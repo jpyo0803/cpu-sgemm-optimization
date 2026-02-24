@@ -40,7 +40,8 @@ template <int M, int N, int K, int TileSize>
 inline void MatmulImplTiling1D(const float* A, const float* B, float* result) {
   for (int tile_offset = 0; tile_offset < K; tile_offset += TileSize) {
     for (int m = 0; m < M; ++m) {
-      for (int k = tile_offset; k < std::min(K, tile_offset + TileSize); ++k) {
+      int tile_offset_end = std::min(K, tile_offset + TileSize);
+      for (int k = tile_offset; k < tile_offset_end; ++k) {
         for (int n = 0; n < N; ++n) {
           result[m * N + n] += A[m * K + k] * B[k * N + n];
         }
@@ -75,10 +76,10 @@ inline void MatmulImplRowColParallelTiling1D(const float* A, const float* B,
   for (int row_tile = 0; row_tile < M; row_tile += 256) {
     for (int col_tile = 0; col_tile < N; col_tile += 256) {
       for (int inner_tile = 0; inner_tile < K; inner_tile += TileSize) {
-        for (int m = row_tile; m < std::min(M, row_tile + 256); ++m) {
-          for (int k = inner_tile; k < std::min(K, inner_tile + TileSize);
-               ++k) {
-            for (int n = col_tile; n < std::min(N, col_tile + 256); ++n) {
+        for (int m = row_tile; m < row_tile + 256; ++m) {
+          int inner_tile_end = std::min(K, inner_tile + TileSize);
+          for (int k = inner_tile; k < inner_tile_end; ++k) {
+            for (int n = col_tile; n < col_tile + 256; ++n) {
               result[m * N + n] += A[m * K + k] * B[k * N + n];
             }
           }

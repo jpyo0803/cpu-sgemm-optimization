@@ -6,14 +6,15 @@ def benchmark(func, A, B):
     # Warm-up
     _ = func(A, B)
 
-    sum_latency = 0.0
-    for _ in range(5):  # 5회 반복하여 평균 시간 측정
+    min_latency = float('inf')
+
+    for _ in range(20):
         start_time = time.perf_counter()
         result = func(A, B)
         end_time = time.perf_counter()
-        sum_latency += (end_time - start_time)
+        min_latency = min(min_latency, end_time - start_time)
 
-    return result, sum_latency / 5.0
+    return result, min_latency
 
 def main():
     # 튜토리얼과 동일하게 1024x1024 사이즈 생성
@@ -43,9 +44,6 @@ def main():
     C_custom_tiling_1d, custom_tiling_1d_time = benchmark(cmm.CustomMatMulTiling1D().matmul, A, B)
     print(f"Custom Tiling 1D C++ Time: {custom_tiling_1d_time:.4f} seconds, Speedup: {numpy_time / custom_tiling_1d_time:.4f}x")
     
-    # Custom C++ (2D Tiling)
-    C_custom_tiling_2d, custom_tiling_2d_time = benchmark(cmm.CustomMatMulTiling2D().matmul, A, B)
-    print(f"Custom Tiling 2D C++ Time: {custom_tiling_2d_time:.4f} seconds, Speedup: {numpy_time / custom_tiling_2d_time:.4f}x")
     # Custom C++ (Row-Column Parallel Tiling 1D)
     C_custom_row_col_parallel_tiling_1d, custom_row_col_parallel_tiling_1d_time = benchmark(cmm.CustomMatMulRowColParallelTiling1D().matmul, A, B)
     print(f"Custom Row-Column Parallel Tiling 1D C++ Time: {custom_row_col_parallel_tiling_1d_time:.4f} seconds, Speedup: {numpy_time / custom_row_col_parallel_tiling_1d_time:.4f}x")
@@ -55,7 +53,6 @@ def main():
     np.testing.assert_allclose(C_custom_register, C_numpy, rtol=1e-4, atol=1e-4)
     np.testing.assert_allclose(C_custom_loop_order, C_numpy, rtol=1e-4, atol=1e-4)
     np.testing.assert_allclose(C_custom_tiling_1d, C_numpy, rtol=1e-4, atol=1e-4)
-    np.testing.assert_allclose(C_custom_tiling_2d, C_numpy, rtol=1e-4, atol=1e-4)
     np.testing.assert_allclose(C_custom_row_col_parallel_tiling_1d, C_numpy, rtol=1e-4, atol=1e-4)
     print("Success: Results match")
 

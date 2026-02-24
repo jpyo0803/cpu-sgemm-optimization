@@ -17,7 +17,8 @@ cpp_extra_compile_args = [
     '-march=native',
     '-ffast-math',
     '-fopenmp', 
-    '-std=c++17'
+    '-std=c++17',
+    '-DNDEBUG'
 ]
 cpp_extra_link_args = [
     '-fopenmp',

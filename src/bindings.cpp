@@ -130,7 +130,7 @@ py::array_t<float> py_matmul_tiling_1d(py::array_t<float> A, py::array_t<float> 
   constexpr int M = 1024;
   constexpr int K = 1024;
   constexpr int N = 1024;
-  constexpr int TileSize = 64; // 타일 크기
+  constexpr int TileSize = 32; // 타일 크기
 
   // 결과를 담을 배열 할당 및 초기화
   auto result = py::array_t<float>({M, N});
@@ -202,7 +202,7 @@ py::array_t<float> py_matmul_row_col_parallel_tiling_1d(py::array_t<float> A, py
   constexpr int M = 1024;
   constexpr int K = 1024;
   constexpr int N = 1024;
-  constexpr int TileSize = 64; // 타일 크기
+  constexpr int TileSize = 32; // 타일 크기
 
   // 결과를 담을 배열 할당 및 초기화
   auto result = py::array_t<float>({M, N});
@@ -234,5 +234,4 @@ PYBIND11_MODULE(custom_backend, m) {
         "Matrix Multiplication with 2D Tiling Optimization");
   m.def("matmul_row_col_parallel_tiling_1d", &py_matmul_row_col_parallel_tiling_1d,
         "Matrix Multiplication with Row-Column Parallel 1D Tiling Optimization");
-
 }
